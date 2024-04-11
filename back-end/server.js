@@ -2,6 +2,8 @@ const express =   require('express');
 const app = express();
 const port = 8000;
 
+const cors=require('cors');
+
 //import connectDB function and call it
 const connectDB=require('./db/dbConnection');
 
@@ -11,12 +13,16 @@ const User = require('./db/users');
 //Middleware for parsing Json
 app.use(express.json());
 
+//enable cors
+app.use(cors());
+
 app.post('/register',async(req,res)=>{
     try{
         const{username,password}=req.body;
         console.log(req.body);
         //user is new object of collection User
         const user =new User({username,password});
+        //user details saved in MONGODB
         await user.save();
         res.status(201).json({message:'Registration Succesfully'});
     }
@@ -46,7 +52,7 @@ app.post('/register',async(req,res)=>{
         res.status(200).json({message:'Login Succesfull'})
     }
     catch(error){
-           res.send(500).json({error:"login failed"})
+           res.send(500).json({error:"login failed "})
     }
  })
 
